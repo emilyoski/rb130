@@ -34,21 +34,20 @@ system 'clear'
 
 class TextAnalyzer
   def process
-    # your implementation
     text_file = File.open("sample_text.txt")
     text = text_file.readlines
     count = 0
 
     text.each do |line|
-      count += 1 if yield(line)
+      count += yield(line)
     end
     count 
   end
 end
 
 analyzer = TextAnalyzer.new
-p analyzer.process { |line| line } 
-# analyzer.process { # your implementation }
+p analyzer.process { |line| 1 } 
+p analyzer.process { |words| words.split(" ").count }
 # analyzer.process { # your implementation }
 
 text_file = File.open("sample_text.txt")
