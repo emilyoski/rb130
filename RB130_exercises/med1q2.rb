@@ -36,20 +36,30 @@ class TextAnalyzer
   def process
     text_file = File.open("sample_text.txt")
     text = text_file.readlines
+    overall_count = 0
     count = 0
+    type = nil
 
     text.each do |line|
-      count += yield(line)
+      count = yield(line)
+      overall_count += count[0]
     end
-    count 
+    text_file.close
+    puts "#{overall_count} #{count[1]}"
   end
 end
 
 analyzer = TextAnalyzer.new
-p analyzer.process { |line| 1 } 
-p analyzer.process { |words| words.split(" ").count }
-# analyzer.process { # your implementation }
 
-text_file = File.open("sample_text.txt")
-p text_file.readlines
+# paragraphs
+analyzer.process do |paragraph| 
+  num = (paragraph == "\n" ? 1 : 0)
+  [num, "paragraphs"]
+end
+
+# lines
+analyzer.process { |line| [1, "lines"] }
+
+# words
+analyzer.process { |words| [words.split(" ").count, "words"] }
 
